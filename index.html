@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SoundScape Planner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
+  <div class="bg-white p-6 rounded-xl shadow-lg max-w-md w-full space-y-4">
+    <h1 class="text-xl font-bold text-center">SoundScape Planner</h1>
+    <p class="text-center text-sm text-gray-500">Log your current sound environment</p>
+
+    <div class="grid grid-cols-2 gap-3">
+      <button onclick="logEnv('Quiet')" class="bg-green-100 hover:bg-green-200 p-2 rounded">Quiet</button>
+      <button onclick="logEnv('Traffic')" class="bg-yellow-100 hover:bg-yellow-200 p-2 rounded">Traffic</button>
+      <button onclick="logEnv('Chatter')" class="bg-blue-100 hover:bg-blue-200 p-2 rounded">Chatter</button>
+      <button onclick="logEnv('Music')" class="bg-purple-100 hover:bg-purple-200 p-2 rounded">Music</button>
+    </div>
+
+    <div>
+      <h2 class="font-semibold text-sm mb-2">Sound Log</h2>
+      <ul id="soundList" class="list-disc pl-4 text-sm text-gray-700 space-y-1"></ul>
+    </div>
+  </div>
+
+  <script>
+    const soundList = document.getElementById("soundList");
+
+    function logEnv(env) {
+      const time = new Date().toLocaleTimeString();
+      const entry = `${time} - ${env}`;
+      const li = document.createElement("li");
+      li.textContent = entry;
+      soundList.prepend(li);
+
+      const logs = JSON.parse(localStorage.getItem("soundLogs")) || [];
+      logs.unshift(entry);
+      localStorage.setItem("soundLogs", JSON.stringify(logs));
+    }
+
+    (function loadLogs() {
+      const logs = JSON.parse(localStorage.getItem("soundLogs")) || [];
+      logs.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = entry;
+        soundList.appendChild(li);
+      });
+    })();
+  </script>
+</body>
+</html>
